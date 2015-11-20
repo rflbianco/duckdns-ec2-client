@@ -1,0 +1,20 @@
+# List of [domains].duckdns.org that must be binded to this public IP
+# Must be overridden by user!
+#
+# Example:
+#domains=mydomain
+
+# Authentication Token to authenticate into DuckDNS API.
+# Must be overridden by user!
+#
+# Example:
+#token=a7c4d0ad-114e-40ef-ba1d-d217904a50f2
+
+
+# Sleep time between IP chage checks.
+# Defines how long deamon will take to refresh IP changes.
+# Must conform with 'sleep' command sintax
+# Defaults to 5 minutes.
+#
+# Example:
+#time=5m

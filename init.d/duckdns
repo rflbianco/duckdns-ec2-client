@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo -u duckdns nohup /usr/bin/duckdnsd &> /var/log/duckdns/duckdns.log &

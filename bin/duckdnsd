@@ -1,0 +1,58 @@
+#!/bin/bash
+
+etc='/etc/duckdns/duckdns.conf'
+log='/var/log/duckdns/duckdns.log'
+api_url='https://www.duckdns.org/update'
+
+
+############################################################
+# Check running user
+############################################################
+if [ $(whoami) != 'duckdns' ]; then
+	echo "This application must run with its own user 'duckdns'"
+	exit 10
+fi
+
+
+############################################################
+# Load configurations
+############################################################
+if [ ! -e $etc ]; then
+	echo "Missing configuration file (${etc})."
+	exit 1
+fi 
+
+. $etc
+
+if [ -z "$token" ]; then
+	echo "Access Token not defined. Please, check the configuration file (${etc})."
+	echo "Configuration example: 'token=a7c4d0ad-114e-40ef-ba1d-d217904a50f2'"
+	exit 2
+fi
+
+if [ -z "$domains" ]; then
+        echo "Target domains not defined. Please, check the configuration file (${etc})."
+        echo "Configuration example: 'domains=exampledomain1,exampledomain2'"
+        exit 2
+fi
+
+_time=${time:-'5m'}
+
+
+############################################################
+# Monitor and Update domains
+############################################################
+current=""
+while true; do
+	latest=$(ec2metadata --public-ipv4)
+	echo "public-ipv4=$latest"
+	if [ "$current" == "$latest" ]
+	then
+		echo "ip not changed"
+	else
+		echo "ip has changed - updating"
+		current=$latest
+		echo url="${api_url}?domains=${domains}&token=${token}&ip=" | curl -k -o ${log} -K -
+	fi
+	sleep ${_time}
+done
