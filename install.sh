@@ -11,6 +11,17 @@ usage() {
     echo "    --branch BRANCH_NAME      Allows selecting which branch of git repoository to install from. Default: ${DEFAULT_BRANCH}"
 }
 
+checkDependencies() {
+    echo "Checking runtime dependency: unzip..."
+    
+    if [ -z "$(which unzip)" ]; then
+        echo "fail"
+        exit 1
+    else
+        echo "ok"
+    fi
+}
+
 setToken() {
     echo "Set Token on installation is not supported yet. Please, edit settings in /etc/duckdns/duckdns.conf"
 }
@@ -22,6 +33,8 @@ setDomains() {
 setTime() {
     echo "Set update Time on installation is not supported yet. Please, edit settings in /etc/duckdns/duckdns.conf"
 }
+
+checkDependencies
 
 while [ -n "$1" ]; do
     case $1 in
